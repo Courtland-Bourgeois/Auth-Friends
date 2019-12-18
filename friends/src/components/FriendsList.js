@@ -11,7 +11,6 @@ class FriendsList extends React.Component {
       age: '',
       email: ''
     },
-    isFetching: false
   }
 
   componentDidMount() {
@@ -28,6 +27,38 @@ class FriendsList extends React.Component {
       })
       .catch(err => console.log(err))
   }
+
+  handleChange = e => {
+    this.setState({
+      friend: {
+        ...this.state.friend, 
+        [e.target.name]: e.target.value
+      }
+    })
+  }
+
+  addFriend = e => {
+    e.preventDefault()
+    axiosWithAuth()
+      .post('/friends', this.state.friend)
+      .then(res => {
+        this.setState({
+          friends: res.data,
+          friend: {
+            name: '',
+            age: '',
+            email: ''
+          },
+        })
+      })
+      .catch(err => console.log(err))
+  }
+
+  updateFriends = payload => {
+    this.setState({
+      friends: payload
+    })
+  }
   
   render() {
     console.log(this.state.friends)
@@ -35,9 +66,33 @@ class FriendsList extends React.Component {
       <div>
         <div>
           {this.state.friends.map(friend => (
-            <FriendsCard key={friend.id} friend={friend} />
+            <FriendsCard key={friend.id} friend={friend} updateFriends={this.updateFriends} />
           ))}
         </div>
+        <form onSubmit={this.addFriend}>
+          <input 
+            type='text'
+            name='name'
+            id='name'
+            value={this.state.friend.name}
+            onChange={this.handleChange}
+          />
+          <input 
+            type='number'
+            name='age'
+            id='age'
+            value={this.state.friend.age}
+            onChange={this.handleChange}
+          />
+          <input 
+            type='email'
+            name='email'
+            id='email'
+            value={this.state.friend.email}
+            onChange={this.handleChange}
+          />
+          <button>Add Friend</button>
+        </form>
       </div>
     )
   }

@@ -11,17 +11,11 @@ function App() {
   return (
     <Router>
       <div className='App'>
-        <ul>
-          <li>
-            <Link to='/login'>Login</Link>
-          </li>
-          {/* <li>
-            <Link to='/protected'>Protected</Link>
-          </li> */}
-        </ul>
+        <Link to='/login'>Login</Link> <br/>
+        <Link to='/protected'>Protected</Link>
         <Switch>
-          <PrivateRoute path='/protected' component={FriendsList} />
           <Route path='/login' component={Login} />
+          <PrivateRoute path='/protected' component={FriendsList} />
           <Route component={Login} />
         </Switch>
       </div>
